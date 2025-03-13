@@ -274,10 +274,16 @@ We recommend not to filter before DESeq2 since it will be handling by it. There 
 
 - large number of drop-outs, to reduce computation
 - large number of samples, to reduce computation
-- unbalanced groups, many less samples for one group than another, maybe filtering by group is an option.
+- unbalanced groups, many less samples for one group than another, maybe filtering by group is an option
+- low counts per gene, which can result in artificially inflated log2-fold change values
 
 
 ```{r setup_RUV}
+# IF NECESSARY: filter out lowly-expressed genes
+# zero_dist <- rowSums(counts > 0)
+# hist(zero_dist) # look at this distribution to figure out an appropriate cutoff for the line below
+# counts <- counts[which(zero_dist >= 9), ]
+
 # Establish a null DDS object for DESeq2
 dds_to_use <- DESeqDataSetFromMatrix(counts, coldata, design = ~1)
 
