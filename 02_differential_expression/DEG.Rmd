@@ -1159,7 +1159,9 @@ topN <- 1000
 # This will go through the de_list object, assign the name of the contrast in the de_list to contrast and assign its associated differential expression list (containing lfc, lfcs, all and sig) to the object contrast_de
 deg_List <- imap(de_list, \(contrast_de, contrast){
   # Extract the significant genes from a given contrast and assign them to res_LRT
-  res_LRT <- contrast_de[["sig"]]
+  res_LRT <- contrast_de[["sig"]] %>%
+    # make sure the rownames are gene IDs not numbers 1-n
+    column_to_rownames("gene_id")
   # Create a named vector where the values in the vector are the adjusted p-values and the names are the index of the value
   gene_padj <- setNames(res_LRT$padj, rownames(res_LRT))
   # Subset the gene_padj vector by the adjusted p-value threshold established in the top of this code block
